@@ -1,0 +1,73 @@
+#authFormContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f8f9fa;
+}
+#authForm {
+  width: 400px;
+  padding: 30px 40px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+#authTitle {
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 25px;
+  color: #343a40;
+  font-size: 24px;
+  font-weight: bold;
+}
+.authFieldContainer {
+  margin: 15px 0px;
+}
+.authField {
+  width: 100%;
+  border: 1px solid #ced4da;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+.authField:focus {
+  outline: none;
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+.custom-file-input {
+  border: 1px solid #ced4da;
+  padding: 10px 15px;
+  border-radius: 5px;
+}
+.custom-file-label {
+  margin-top: 10px;
+  font-size: 14px;
+}
+.requiredFieldError {
+  margin: 5px 0px 0px 0px;
+  color: rgb(252, 41, 41);
+  font-size: 10pt;
+}
+#authFormFooter {
+  text-align: center;
+  color: #6c757d;
+  margin-top: 20px;
+}
+#authFormFooter a {
+  color: #007bff;
+  text-decoration: none;
+}
+#authFormFooter a:hover {
+  text-decoration: underline;
+}
+#loginMessage {
+  text-align: center;
+  padding: 0.5rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+}

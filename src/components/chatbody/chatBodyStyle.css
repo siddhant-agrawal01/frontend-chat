@@ -1,0 +1,129 @@
+#chat-message-input {
+  margin-right: -5px;
+  border-radius: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 138px);
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  transition: all 0.5s;
+  padding: 20px;
+  background-color: #e5ddd5;
+}
+
+.chat-message-left,
+.chat-message-right {
+  display: flex;
+  flex-shrink: 0;
+  margin-bottom: 10px;
+}
+
+.chat-message-left {
+  margin-right: auto;
+}
+
+.chat-message-right {
+  flex-direction: row-reverse;
+  margin-left: auto;
+}
+
+/* typing bubble */
+.chat-bubble {
+  background-color: #dcf8c6;
+  padding: 15px 15px;
+  border-radius: 7.5px;
+  display: inline-block;
+  max-width: 100%;
+  margin: 10px;
+}
+
+.chat-message-left .chat-bubble {
+  background-color: #fff;
+}
+
+.typing {
+  align-items: center;
+  display: flex;
+  height: 17px;
+}
+
+.typing .dot {
+  animation: mercuryTypingAnimation 1s infinite ease-in-out;
+  background-color: #fff0c0;
+  border-radius: 50%;
+  height: 7px;
+  margin-right: 4px;
+  vertical-align: middle;
+  width: 7px;
+  display: inline-block;
+}
+
+.typing .dot:nth-child(1) {
+  animation-delay: 200ms;
+}
+
+.typing .dot:nth-child(2) {
+  animation-delay: 300ms;
+}
+
+.typing .dot:nth-child(3) {
+  animation-delay: 400ms;
+}
+
+.typing .dot:last-child {
+  margin-right: 0;
+}
+
+@keyframes mercuryTypingAnimation {
+  0% {
+    transform: translateY(0px);
+    background-color: #ffc003;
+  }
+  28% {
+    transform: translateY(-7px);
+    background-color: #e4bf52;
+  }
+  44% {
+    transform: translateY(0px);
+    background-color: #dac587;
+  }
+}
+
+.chat-header {
+  background-color: #075e54;
+  color: rgb(11, 247, 137);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+}
+
+.chat-header img {
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.chat-footer {
+  background-color: #f0f0f0;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #ddd;
+}
+
+.chat-footer .input-group {
+  width: 100%;
+}
+
+.chat-footer .btn {
+  background-color: #075e54;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  margin-left: 10px;
+}
