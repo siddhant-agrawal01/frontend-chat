@@ -7,9 +7,15 @@ import SocketActions from "../../lib/socketActions";
 import CommonUtil from "../../util/commonUtil";
 import "./chatBodyStyle.css";
 
-let socket = new WebSocket(
-  ServerUrl.WS_BASE_URL + `ws/users/${CommonUtil.getUserId()}/chat/`
-);
+let userId = CommonUtil.getUserId();
+if (!userId) {
+  console.error("User ID is not available. WebSocket connection cannot be established.");
+} else {
+  let socket = new WebSocket(
+    ServerUrl.WS_BASE_URL + `ws/users/${userId}/chat/`
+  );
+}
+
 let typingTimer = 0;
 let isTypingSignalSent = false;
 
