@@ -7,22 +7,23 @@ import SocketActions from "../../lib/socketActions";
 import CommonUtil from "../../util/commonUtil";
 import "./chatBodyStyle.css";
 
-let userId = CommonUtil.getUserId();
-if (!userId) {
-  console.error("User ID is not available. WebSocket connection cannot be established.");
-} else {
-  let socket = new WebSocket(
-    ServerUrl.WS_BASE_URL + `ws/users/${userId}/chat/`
-  );
-}
-
-let typingTimer = 0;
-let isTypingSignalSent = false;
-
 const ChatBody = ({ match, currentChattingMember, setOnlineUserList }) => {
   const [inputMessage, setInputMessage] = useState("");
   const [messages, setMessages] = useState({});
   const [typing, setTyping] = useState(false);
+
+  let userId = CommonUtil.getUserId();
+  let socket;
+  if (!userId) {
+    console.error("User ID is not available. WebSocket connection cannot be established.");
+  } else {
+    socket = new WebSocket(
+      ServerUrl.WS_BASE_URL + `ws/users/${userId}/chat/`
+    );
+  }
+
+  let typingTimer = 0;
+  let isTypingSignalSent = false;
 
   const fetchChatMessage = async () => {
     const currentChatId = CommonUtil.getActiveChatId(match);
@@ -41,8 +42,6 @@ const ChatBody = ({ match, currentChattingMember, setOnlineUserList }) => {
     fetchChatMessage();
   }, [CommonUtil.getActiveChatId(match)]);
 
-
-  
   const loggedInUserId = CommonUtil.getUserId();
   const getChatMessageClassName = (userId) => {
     return loggedInUserId === userId
@@ -50,31 +49,33 @@ const ChatBody = ({ match, currentChattingMember, setOnlineUserList }) => {
       : "chat-message-left pb-3";
   };
 
-  socket.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    const chatId = CommonUtil.getActiveChatId(match);
-    const userId = CommonUtil.getUserId();
-    if (chatId === data.roomId) {
-      if (data.action === SocketActions.MESSAGE) {
-        data["userImage"] = ServerUrl.BASE_URL.slice(0, -1) + data.userImage;
-        setMessages((prevState) => {
-          let messagesState = JSON.parse(JSON.stringify(prevState));
-          messagesState.results.unshift(data);
-          return messagesState;
-        });
-        setTyping(false);
-      } else if (data.action === SocketActions.TYPING && data.user !== userId) {
-        setTyping(data.typing);
+  if (socket) {
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      const chatId = CommonUtil.getActiveChatId(match);
+      const userId = CommonUtil.getUserId();
+      if (chatId === data.roomId) {
+        if (data.action === SocketActions.MESSAGE) {
+          data["userImage"] = ServerUrl.BASE_URL.slice(0, -1) + data.userImage;
+          setMessages((prevState) => {
+            let messagesState = JSON.parse(JSON.stringify(prevState));
+            messagesState.results.unshift(data);
+            return messagesState;
+          });
+          setTyping(false);
+        } else if (data.action === SocketActions.TYPING && data.user !== userId) {
+          setTyping(data.typing);
+        }
       }
-    }
-    if (data.action === SocketActions.ONLINE_USER) {
-      setOnlineUserList(data.userList);
-    }
-  };
+      if (data.action === SocketActions.ONLINE_USER) {
+        setOnlineUserList(data.userList);
+      }
+    };
+  }
 
   const messageSubmitHandler = (event) => {
     event.preventDefault();
-    if (inputMessage) {
+    if (inputMessage && socket) {
       socket.send(
         JSON.stringify({
           action: SocketActions.MESSAGE,
@@ -88,14 +89,16 @@ const ChatBody = ({ match, currentChattingMember, setOnlineUserList }) => {
   };
 
   const sendTypingSignal = (typing) => {
-    socket.send(
-      JSON.stringify({
-        action: SocketActions.TYPING,
-        typing: typing,
-        user: CommonUtil.getUserId(),
-        roomId: CommonUtil.getActiveChatId(match),
-      })
-    );
+    if (socket) {
+      socket.send(
+        JSON.stringify({
+          action: SocketActions.TYPING,
+          typing: typing,
+          user: CommonUtil.getUserId(),
+          roomId: CommonUtil.getActiveChatId(match),
+        })
+      );
+    }
   };
 
   const chatMessageTypingHandler = (event) => {
